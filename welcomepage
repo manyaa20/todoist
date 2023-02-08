@@ -1,0 +1,144 @@
+import '../flutter_flow/flutter_flow_animations.dart';
+import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
+import '../loginpage/loginpage_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class WelcomepageWidget extends StatefulWidget {
+  const WelcomepageWidget({Key? key}) : super(key: key);
+
+  @override
+  _WelcomepageWidgetState createState() => _WelcomepageWidgetState();
+}
+
+class _WelcomepageWidgetState extends State<WelcomepageWidget>
+    with TickerProviderStateMixin {
+  final animationsMap = {
+    'columnOnActionTriggerAnimation': AnimationInfo(
+      trigger: AnimationTrigger.onActionTrigger,
+      applyInitialState: true,
+      effects: [
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: 0,
+          end: 1,
+        ),
+      ],
+    ),
+  };
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await Navigator.pushAndRemoveUntil(
+        context,
+        PageTransition(
+          type: PageTransitionType.fade,
+          duration: Duration(milliseconds: 15),
+          reverseDuration: Duration(milliseconds: 15),
+          child: LoginpageWidget(),
+        ),
+        (r) => false,
+      );
+    });
+
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      animationsMap['columnOnPageLoadAnimation']!.controller.forward(from: 0.0);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: Color(0xFF1E2429),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF4B39EF), Color(0xFFEE8B60)],
+            stops: [0, 1],
+            begin: AlignmentDirectional(1, -1),
+            end: AlignmentDirectional(-1, 1),
+          ),
+        ),
+        child: InkWell(
+          onTap: () async {
+            await Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.fade,
+                duration: Duration(milliseconds: 300),
+                reverseDuration: Duration(milliseconds: 300),
+                child: LoginpageWidget(),
+              ),
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'TODOIST',
+                style: FlutterFlowTheme.of(context).title1.override(
+                      fontFamily: 'Vibur',
+                      color: Color(0xFF2C1A30),
+                      fontSize: 65,
+                      useGoogleFonts: GoogleFonts.asMap().containsKey(
+                          FlutterFlowTheme.of(context).title1Family),
+                    ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                child: Text(
+                  'Welcome to Todoist',
+                  style: FlutterFlowTheme.of(context).title1.override(
+                        fontFamily: 'Lexend Deca',
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).title1Family),
+                      ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 120),
+                child: Text(
+                  'Never stop working',
+                  style: FlutterFlowTheme.of(context).title3.override(
+                        fontFamily: 'Lexend Deca',
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).title3Family),
+                      ),
+                ),
+              ),
+            ],
+          ),
+        ).animateOnActionTrigger(
+          animationsMap['columnOnActionTriggerAnimation']!,
+        ),
+      ),
+    );
+  }
+}
